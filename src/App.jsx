@@ -19,15 +19,23 @@ const App = React.createClass({
             id: 2,
             username: "Anonymous",
             content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-          },
-          {
-            id: 3,
-            username: "",
-            content: "NOOOOOOOOOOOOOOOO I don't want to use forEach()."
           }
         ]
       }
     };
+  },
+
+  componentDidMount: function() {
+    console.log("componentDidMount <App/>");
+    setTimeout(() => {
+      console.log("Simulating incoming message");
+      this.state.data.messages.push({
+        id: 3,
+        username: "Michelle",
+        content: "Hello there!"
+      });
+      this.setState({data: this.state.data})
+    }, 3000);
   },
 
   render: function() {
