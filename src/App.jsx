@@ -17,13 +17,14 @@ import CharBar from './charBar.jsx';
 
 const App = React.createClass({
   render: function() {
+    console.log("Rendering <App/>");
     return (
       <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
         </nav>
-        <MessageList />
-        <CharBar />
+        <MessageList/>
+        <CharBar/>
       </div>
     );
   }
