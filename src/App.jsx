@@ -1,3 +1,52 @@
+// ES5
+import React, {Component} from 'react';
+import MessageList from './messageList.jsx';
+import CharBar from './charBar.jsx';
+
+const App = React.createClass({
+
+  getInitialState: function() {
+    return {
+      data: {
+        currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+        messages: [
+          {
+            id: 1,
+            username: "Bob",
+            content: "Has anyone seen my marbles?",
+          },
+          {
+            id: 2,
+            username: "Anonymous",
+            content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
+          },
+          {
+            id: 3,
+            username: "",
+            content: "NOOOOOOOOOOOOOOOO I don't want to use forEach()."
+          }
+        ]
+      }
+    };
+  },
+
+  render: function() {
+    console.log("Rendering <App/>");
+    return (
+      <div className="wrapper">
+        <nav>
+          <h1>Chatty</h1>
+        </nav>
+        <MessageList data={this.state.data} />
+        <CharBar data={this.state.data} />
+      </div>
+    );
+  }
+
+});
+
+export default App;
+
 // ES6
 // import React, {Component} from 'react';
 //
@@ -9,25 +58,3 @@
 //   }
 // }
 // export default App;
-
-// ES5
-import React, {Component} from 'react';
-import MessageList from './messageList.jsx';
-import CharBar from './charBar.jsx';
-
-const App = React.createClass({
-  render: function() {
-    console.log("Rendering <App/>");
-    return (
-      <div className="wrapper">
-        <nav>
-          <h1>Chatty</h1>
-        </nav>
-        <MessageList/>
-        <CharBar/>
-      </div>
-    );
-  }
-});
-
-export default App;
