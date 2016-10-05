@@ -33,8 +33,13 @@ const App = React.createClass({
   },
 
   componentDidMount: function() {
+
+    const socket = new WebSocket("ws://localhost:4000/socketserver");
+    socket.onopen = function(event) {
+      console.log("Connected to websocket server");
+    };
+
     setTimeout(() => {
-      console.log("Simulating incoming message");
       this.state.data.messages.push({
         id: 3,
         username: "Michelle",
