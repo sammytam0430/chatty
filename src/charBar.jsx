@@ -2,14 +2,20 @@ import React, {Component} from 'react';
 
 const CharBar = React.createClass({
 
+  addNewMessage: function(e) {
+    if (e.key === 'Enter') {
+      console.log(this.refs.username.value + ',' + this.refs.newMessage.value);
+      this.props.submit(this.refs.username.value, this.refs.newMessage.value);
+    }
+  },
+
   render: function() {
-    console.log("Rendering <CharBar/>");
-    // var currentUser = (this.props.data.currentUser.name) ? this.props.data.currentUser.name : 'Anonymous';
-    var currentUser = this.props.data.currentUser.name;
+    // const currentUser = (this.props.data.currentUser.name) ? this.props.data.currentUser.name : 'Anonymous';
+    const currentUser = this.props.data.currentUser.name;
     return (
       <footer>
-        <input id="username" type="text" value={currentUser} />
-        <input id="new-message" type="text" placeholder="Type a message and hit ENTER" />
+        <input id="username" type="text" placeholder="Insert your name" ref='username'/>
+        <input id="new-message" type="text" placeholder="Type a message and hit ENTER" onKeyPress= {this.addNewMessage} ref='newMessage'/>
       </footer>
     );
   }

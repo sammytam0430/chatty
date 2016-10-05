@@ -21,12 +21,18 @@ const App = React.createClass({
             content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
           }
         ]
-      }
+      },
     };
   },
 
+  submit: function (username, message) {
+    this.state.data.messages.push({
+      username: username,
+      content: message
+    });
+  },
+
   componentDidMount: function() {
-    console.log("componentDidMount <App/>");
     setTimeout(() => {
       console.log("Simulating incoming message");
       this.state.data.messages.push({
@@ -39,14 +45,13 @@ const App = React.createClass({
   },
 
   render: function() {
-    console.log("Rendering <App/>");
     return (
       <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
         </nav>
         <MessageList data={this.state.data} />
-        <CharBar data={this.state.data} />
+        <CharBar data={this.state.data} submit={this.submit}/>
       </div>
     );
   }
