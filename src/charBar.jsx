@@ -4,8 +4,8 @@ const CharBar = React.createClass({
 
   addNewMessage: function(e) {
     if (e.key === 'Enter') {
-      console.log(this.refs.username.value + ',' + this.refs.newMessage.value);
       this.props.submit(this.refs.username.value, this.refs.newMessage.value);
+      this.refs.newMessage.value = "";
     }
   },
 
