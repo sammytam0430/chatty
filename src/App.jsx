@@ -2,41 +2,44 @@
 import React, {Component} from 'react';
 import MessageList from './messageList.jsx';
 import CharBar from './charBar.jsx';
+const socket = new WebSocket("ws://localhost:4000/socketserver");
 
 const App = React.createClass({
 
   getInitialState: function() {
     return {
       data: {
-        currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: [
-          {
-            id: 1,
-            username: "Bob",
-            content: "Has anyone seen my marbles?",
-          },
-          {
-            id: 2,
-            username: "Anonymous",
-            content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-          }
-        ]
-      },
+        currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous`
+        messages: []
+      }
     };
   },
 
-  submit: function (username, message) {
-    this.state.data.messages.push({
-      username: username,
-      content: message
-    });
+  submit: function (message) {
+    socket.send(JSON.stringify(message));
   },
+
+
 
   componentDidMount: function() {
 
-    const socket = new WebSocket("ws://localhost:4000/socketserver");
     socket.onopen = function(event) {
       console.log("Connected to websocket server");
+    };
+
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      const newMessages = this.state.data.messages.concat([message]);
+      const newCurrentUser = Object.assign( {}, this.state.data.currentUser, {
+        name: message.username
+      });
+      let newData = Object.assign( {}, this.state.data, {
+        messages: newMessages, currentUser: newCurrentUser
+      });
+      newData = Object.assign( {}, this.state, {
+        data: newData
+      });
+      this.setState(newData);
     };
 
     setTimeout(() => {
@@ -47,6 +50,7 @@ const App = React.createClass({
       });
       this.setState({data: this.state.data})
     }, 3000);
+
   },
 
   render: function() {

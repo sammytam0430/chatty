@@ -8,9 +8,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
 
-setInterval(() => {
+// setInterval(() => {
   ReactDOM.render(
     <App />,
     document.getElementById('react-root')
   );
-}, 50);
+// }, 50);
