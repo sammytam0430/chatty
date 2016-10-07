@@ -6,12 +6,16 @@ const MessageList = React.createClass({
   render: function() {
     return (
       <div id="message-list">
-        {this.props.data.messages.map((data) => (
-          <Message key={data.id} username={data.username} content={data.content}/>
-        ))}
-        {this.props.notification.map((notification) => (
-          <MessageSystem key={notification.id} notification={notification}/>
-        ))}
+        {this.props.data.messages.map((data) => {
+          switch (data.type) {
+            case 'incomingNotification':
+              return <MessageSystem key={data.id} content={data.content}/>
+            break;
+            default:
+              return <Message key={data.id} username={data.username} content={data.content}/>
+            }
+          }
+        )}
       </div>
     );
   }

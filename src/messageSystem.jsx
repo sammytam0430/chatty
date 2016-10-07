@@ -5,7 +5,7 @@ const MessageSystem = React.createClass({
   render: function() {
     return (
       <div className="message system">
-        {this.props.notification.content}
+        {this.props.content}
       </div>
     );
   }
