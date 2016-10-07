@@ -31,7 +31,9 @@ nav h2 {
 }
 
 #message-list {
-  height: calc(100vh - 131px);
+  width: 98%;
+  overflow: auto;
+  height: calc(100vh - 140px);
   padding: 16px 8px;
 }
 

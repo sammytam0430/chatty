@@ -4,16 +4,20 @@ let oldUsername;
 const CharBar = React.createClass({
 
   postMessage: function(e) {
+    let username = this.refs.username.value;
     if (e.key === 'Enter') {
       if (this.refs.newMessage.value.match(/^\s+$/) || this.refs.newMessage.value === '') {
         this.refs.newMessage.value = '';
         this.refs.newMessage.placeholder = 'Type a message and hit ENTER';
         return;
       }
+      if (username.match(/^\s+$/) || username === '') {
+        username = 'Anonymous';
+      }
       this.props.postMessage({
         type: 'postMessage',
         color: this.props.color,
-        username: this.refs.username.value,
+        username: username,
         content: this.refs.newMessage.value
       });
       this.refs.newMessage.value = '';
@@ -23,18 +27,22 @@ const CharBar = React.createClass({
   postNotification: function(e) {
     let newUsername = this.refs.username.value;
     if (e.key === 'Enter' || e.type === 'blur') {
-      if (newUsername.match(/^\s+$/)) {
+      if (oldUsername === newUsername) {
+        return;
+      }
+      if (newUsername.match(/^\s+$/) || newUsername === '') {
         newUsername = 'Anonymous';
+        return;
       }
       if (!(oldUsername)) {
         oldUsername = 'Anonymous';
+        return;
       }
       this.props.postNotification({
         type: 'postNotification',
         username: newUsername,
         content: oldUsername + ' has changed their name to ' + newUsername
       });
-      console.log(oldUsername + ' has changed their name to ' + newUsername);
       oldUsername = newUsername;
     }
   },

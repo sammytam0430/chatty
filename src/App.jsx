@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import MessageList from './messageList.jsx';
 import CharBar from './charBar.jsx';
-const socket = new WebSocket("ws://0.0.0.0:4000/socketserver");
+const socket = new WebSocket("ws://10.10.45.78:4000/socketserver");
 
 const App = React.createClass({
 
@@ -18,18 +18,11 @@ const App = React.createClass({
   },
 
   postMessage: function(message) {
-    if (message.username.match(/^\s+$/) || message.username === '') {
-      message.username = 'Anonymous';
-    }
     socket.send(JSON.stringify(message));
   },
 
   postNotification: function(message) {
-    if (message.username === this.state.data.currentUser.name || message.username.match(/^\s+$/) || message.username === '') {
-      return
-    } else {
-      socket.send(JSON.stringify(message));
-    }
+    socket.send(JSON.stringify(message));
   },
 
   componentDidMount: function() {
@@ -65,15 +58,6 @@ const App = React.createClass({
           throw new Error("Unknown event type " + data.type);
       }
     };
-
-    setTimeout(() => {
-      this.state.data.messages.push({
-        id: 3,
-        username: "Michelle",
-        content: "Hello there!"
-      });
-      this.setState({data: this.state.data})
-    }, 1000);
 
   },
 
