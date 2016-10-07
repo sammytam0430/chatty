@@ -9,17 +9,24 @@ const App = React.createClass({
   getInitialState: function() {
     return {
       data: {
-        currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous`
+        currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous`
         messages: []
-      }
+      },
+      notification: []
     };
   },
 
-  submit: function (message) {
+  postMessage: function(message) {
     socket.send(JSON.stringify(message));
   },
 
-
+  postNotification: function(message) {
+    if (message.username === this.state.data.currentUser.name || message.username.match(/^\s+$/) || message.usernam === '') {
+      return
+    } else {
+      socket.send(JSON.stringify(message));
+    }
+  },
 
   componentDidMount: function() {
 
@@ -29,17 +36,39 @@ const App = React.createClass({
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      const newMessages = this.state.data.messages.concat([message]);
-      const newCurrentUser = Object.assign( {}, this.state.data.currentUser, {
-        name: message.username
-      });
-      let newData = Object.assign( {}, this.state.data, {
-        messages: newMessages, currentUser: newCurrentUser
-      });
-      newData = Object.assign( {}, this.state, {
-        data: newData
-      });
-      this.setState(newData);
+      let newData;
+      let newCurrentUser;
+      switch (message.type) {
+        case 'incomingMessage':
+          console.log(message);
+          newCurrentUser = Object.assign( {}, this.state.data.currentUser, {
+            name: message.username
+          });
+          newData = Object.assign( {}, this.state.data, {
+            messages: this.state.data.messages.concat([message]),
+            currentUser: newCurrentUser
+          });
+          newData = Object.assign( {}, this.state, {
+            data: newData
+          });
+          this.setState(newData);
+          break;
+        case 'incomingNotification':
+          newCurrentUser = Object.assign( {}, this.state.data.currentUser, {
+            name: message.username
+          });
+          newData = Object.assign( {}, this.state.data, {
+            currentUser: newCurrentUser
+          });
+          newData = Object.assign( {}, this.state, {
+            data: newData,
+            notification: this.state.notification.concat([message])
+          });
+          this.setState(newData);
+          break;
+        default:
+          throw new Error("Unknown event type " + data.type);
+      }
     };
 
     setTimeout(() => {
@@ -59,8 +88,8 @@ const App = React.createClass({
         <nav>
           <h1>Chatty</h1>
         </nav>
-        <MessageList data={this.state.data} />
-        <CharBar data={this.state.data} submit={this.submit}/>
+        <MessageList data={this.state.data} notification={this.state.notification}/>
+        <CharBar data={this.state.data} postMessage={this.postMessage} postNotification={this.postNotification}/>
       </div>
     );
   }
