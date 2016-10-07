@@ -12,7 +12,7 @@ const MessageList = React.createClass({
               return <MessageSystem key={data.id} content={data.content}/>
             break;
             default:
-              return <Message key={data.id} username={data.username} content={data.content}/>
+              return <Message key={data.id} username={data.username} content={data.content} color={data.color}/>
             }
           }
         )}

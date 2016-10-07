@@ -2,17 +2,18 @@
 import React, {Component} from 'react';
 import MessageList from './messageList.jsx';
 import CharBar from './charBar.jsx';
-const socket = new WebSocket("ws://10.10.45.78:4000/socketserver");
+const socket = new WebSocket("ws://0.0.0.0:4000/socketserver");
 
 const App = React.createClass({
 
   getInitialState: function() {
     return {
       data: {
-        currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous`
+        currentUser: {name: 'Anonymous'}, // optional. if currentUser is not defined, it means the user is Anonymous`
         messages: []
       },
-      onlineUser: 0
+      onlineUser: 0,
+      color: ''
     };
   },
 
@@ -39,24 +40,24 @@ const App = React.createClass({
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log(message);
       let newData;
       switch (message.type) {
         case 'onlineUser':
-          this.setState({onlineUser: message.length})
-          console.log(this.state.onlineUser);
+          this.setState({onlineUser: message.length});
+          break;
+        case 'color':
+          // console.log('color = ' + message.color);
+          this.setState({color: message.color});
           break;
         case 'incomingMessage':
           newData = Object.assign( {}, this.state.data, {
-            messages: this.state.data.messages.concat([message]),
-            currentUser: {name: message.username}
+            messages: this.state.data.messages.concat([message])
           });
           this.setState({data: newData});
           break;
         case 'incomingNotification':
           newData = Object.assign( {}, this.state.data, {
-            messages: this.state.data.messages.concat([message]),
-            currentUser: {name: message.username}
+            messages: this.state.data.messages.concat([message])
           });
           this.setState({data: newData});
           break;
@@ -79,12 +80,12 @@ const App = React.createClass({
   render: function() {
     return (
       <div className="wrapper">
-        <nav>
+        <nav style={{background: this.state.color}}>
           <h1>Chatty</h1>
-          <h3>{this.state.onlineUser} users online</h3>
+          <h2>{this.state.onlineUser} users online</h2>
         </nav>
         <MessageList data={this.state.data}/>
-        <CharBar data={this.state.data} postMessage={this.postMessage} postNotification={this.postNotification}/>
+        <CharBar data={this.state.data} postMessage={this.postMessage} postNotification={this.postNotification} color={this.state.color}/>
       </div>
     );
   }
