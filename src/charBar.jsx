@@ -36,7 +36,6 @@ const CharBar = React.createClass({
       }
       if (!(oldUsername)) {
         oldUsername = 'Anonymous';
-        return;
       }
       this.props.postNotification({
         type: 'postNotification',

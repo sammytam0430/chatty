@@ -31,8 +31,10 @@ nav h2 {
 }
 
 #message-list {
-  width: 98%;
-  overflow: auto;
+  position : relative;
+  bottom:0;
+  width: 98.9%;
+  overflow-y: auto;
   height: calc(100vh - 140px);
   padding: 16px 8px;
 }
