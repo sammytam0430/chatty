@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import MessageList from './messageList.jsx';
 import CharBar from './charBar.jsx';
-const socket = new WebSocket("ws://localhost:4000/socketserver");
+const socket = new WebSocket("ws://10.10.45.78:4000/socketserver");
 
 const App = React.createClass({
 
@@ -11,7 +11,8 @@ const App = React.createClass({
       data: {
         currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous`
         messages: []
-      }
+      },
+      onlineUser: 0
     };
   },
 
@@ -38,23 +39,30 @@ const App = React.createClass({
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
+      console.log(message);
       let newData;
       switch (message.type) {
+        case 'onlineUser':
+          this.setState({onlineUser: message.length})
+          console.log(this.state.onlineUser);
+          break;
         case 'incomingMessage':
           newData = Object.assign( {}, this.state.data, {
-            messages: this.state.data.messages.concat([message])
+            messages: this.state.data.messages.concat([message]),
+            currentUser: {name: message.username}
           });
+          this.setState({data: newData});
           break;
         case 'incomingNotification':
           newData = Object.assign( {}, this.state.data, {
             messages: this.state.data.messages.concat([message]),
             currentUser: {name: message.username}
           });
+          this.setState({data: newData});
           break;
         default:
           throw new Error("Unknown event type " + data.type);
       }
-      this.setState({data: newData});
     };
 
     setTimeout(() => {
@@ -73,6 +81,7 @@ const App = React.createClass({
       <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
+          <h3>{this.state.onlineUser} users online</h3>
         </nav>
         <MessageList data={this.state.data}/>
         <CharBar data={this.state.data} postMessage={this.postMessage} postNotification={this.postNotification}/>

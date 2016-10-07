@@ -20,7 +20,14 @@ nav {
 }
 
 nav h1 {
+  float: left;
   margin: 0;
+  width: auto;
+}
+
+nav h3 {
+  float: right;
+  width: auto;
 }
 
 #message-list {
