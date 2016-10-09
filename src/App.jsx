@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import MessageList from './messageList.jsx';
 import CharBar from './charBar.jsx';
-const socket = new WebSocket("ws://10.10.45.78:4000/socketserver");
+const socket = new WebSocket("ws://chat-app-server.heroku.com/socketserver");
 
 const App = React.createClass({
 
