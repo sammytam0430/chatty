@@ -1,6 +1,8 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.config');
+require('dotenv').config();
+var PORT = process.env.PORT || 3000
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
@@ -9,7 +11,7 @@ new WebpackDevServer(webpack(config), {
     poll: 1000
   }
 })
-.listen(3000, '0.0.0.0', function (err, result) {
+.listen(PORT, function (err, result) {
   if (err) {
     console.log(err);
   }
